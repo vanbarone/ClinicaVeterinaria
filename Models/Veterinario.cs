@@ -1,6 +1,6 @@
 ﻿namespace ClinicaVeterinaria.Models
 {
-    public class Veterinario
+    public class Veterinario: Pessoa
     {
         public string crv { get; set; }
 
