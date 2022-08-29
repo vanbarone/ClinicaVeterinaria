@@ -2,7 +2,7 @@
 
 namespace ClinicaVeterinaria.Models
 {
-    public class Clientes: Pessoa
+    public class Cliente: Pessoa
     {
 
     }

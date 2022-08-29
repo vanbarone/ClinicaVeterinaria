@@ -3,14 +3,14 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace ClinicaVeterinaria.Models
 {
-    public class Consultas
+    public class Consulta
     {
 
         public int id { get; set; }
 
-        public Animais animais { get; set; }
+        public Animal animais { get; set; }
 
-        public Veterinarios veterinarios { get; set; }
+        public Veterinario veterinarios { get; set; }
 
         public DateTime data { get; set; }
 

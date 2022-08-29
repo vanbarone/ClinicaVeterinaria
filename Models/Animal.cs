@@ -2,7 +2,7 @@
 
 namespace ClinicaVeterinaria.Models
 {
-    public class Animais
+    public class Animal
     {
         public int id { get; set; }
 
@@ -12,9 +12,9 @@ namespace ClinicaVeterinaria.Models
 
         public DateTime dtNascimento { get; set; }
 
-        public TipoAnimais tipoAnimais { get; set; }
+        public TipoAnimal tipoAnimais { get; set; }
 
-        public Clientes cliente { get; set; }
+        public Cliente cliente { get; set; }
 
     }
 }

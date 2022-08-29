@@ -2,7 +2,7 @@
 
 namespace ClinicaVeterinaria.Models
 {
-    public class TipoAnimais
+    public class TipoAnimal
     {
         public int id { get; set; }
 
