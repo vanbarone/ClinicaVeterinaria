@@ -65,6 +65,7 @@ namespace ClinicaVeterinaria.Repositories
 
         }
 
+        //[Microsoft.AspNetCore.Mvc
         public TipoAnimal Insert([FromForm] TipoAnimal entity)
         {
             using(SqlConnection conn = Conexao.GetConection())

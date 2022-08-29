@@ -2,7 +2,7 @@
 
 namespace ClinicaVeterinaria.Models
 {
-    public class Pessoa
+    public abstract class Pessoa
     {
         public int id { get; set; }
 
