@@ -1,5 +1,6 @@
 ﻿using ClinicaVeterinaria.Models;
 using ClinicaVeterinaria.Utils;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -8,7 +9,7 @@ namespace ClinicaVeterinaria.Repositories
 {
     public class VeterinarioRepository
     {
-        public Veterinario GetById()
+        public Veterinario GetById(int id)
         {
             Veterinario entity = new Veterinario();
 
@@ -20,14 +21,19 @@ namespace ClinicaVeterinaria.Repositories
 
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
+                    cmd.Parameters.Add("ID", SqlDbType.Int).Value = id;
+
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        entity.id = (int)reader["ID"];
-                        entity.nome = (string)reader["NOME"];
-                        entity.cpf = (string)reader["CPF"];
-                        entity.email = (string)reader["EMAIL"];
-                        entity.celular = (string)reader["CELULAR"];
-                        entity.crv = (string)reader["CRV"];
+                        if (reader.Read())
+                        {
+                            entity.id = (int)reader["ID"];
+                            entity.nome = (string)reader["NOME"];
+                            entity.cpf = (string)reader["CPF"];
+                            entity.email = (string)reader["EMAIL"];
+                            entity.celular = (string)reader["CELULAR"];
+                            entity.crv = (string)reader["CRV"];
+                        }
                     }
                 }
             }
@@ -57,7 +63,7 @@ namespace ClinicaVeterinaria.Repositories
                                 nome = (string)reader["NOME"],
                                 cpf = (string)reader["CPF"],
                                 email = (string)reader["EMAIL"],
-                                celular = (string)reader["CELULAR"],
+                                celular = (string)reader?["CELULAR"],
                                 crv = (string)reader["CRV"]
                             });
                         }
@@ -81,8 +87,8 @@ namespace ClinicaVeterinaria.Repositories
                 {
                     cmd.Parameters.Add("NOME", SqlDbType.NVarChar).Value = entity.nome;
                     cmd.Parameters.Add("CPF", SqlDbType.NVarChar).Value = entity.cpf;
-                    cmd.Parameters.Add("EMAIL", SqlDbType.NVarChar).Value = entity.email;
-                    cmd.Parameters.Add("CELULAR", SqlDbType.NVarChar).Value = entity.celular;
+                    cmd.Parameters.Add("EMAIL", SqlDbType.NVarChar).Value = (entity.email == null ? DBNull.Value : entity.email);
+                    cmd.Parameters.Add("CELULAR", SqlDbType.NVarChar).Value = (entity.celular == null ? DBNull.Value : entity.celular);
                     cmd.Parameters.Add("CRV", SqlDbType.NVarChar).Value = entity.crv;
 
                     cmd.ExecuteNonQuery();
@@ -111,13 +117,15 @@ namespace ClinicaVeterinaria.Repositories
                     cmd.Parameters.Add("ID", SqlDbType.NVarChar).Value = id;
                     cmd.Parameters.Add("NOME", SqlDbType.NVarChar).Value = entity.nome;
                     cmd.Parameters.Add("CPF", SqlDbType.NVarChar).Value = entity.cpf;
-                    cmd.Parameters.Add("EMAIL", SqlDbType.NVarChar).Value = entity.email;
-                    cmd.Parameters.Add("CELULAR", SqlDbType.NVarChar).Value = entity.celular;
+                    cmd.Parameters.Add("EMAIL", SqlDbType.NVarChar).Value = (entity.email == null ? DBNull.Value : entity.email); ;
+                    cmd.Parameters.Add("CELULAR", SqlDbType.NVarChar).Value = (entity.celular == null ? DBNull.Value : entity.celular); ;
                     cmd.Parameters.Add("CRV", SqlDbType.NVarChar).Value = entity.crv;
 
                     cmd.ExecuteNonQuery();
                 }
             }
+
+            entity.id = id;
 
             return entity;
         }

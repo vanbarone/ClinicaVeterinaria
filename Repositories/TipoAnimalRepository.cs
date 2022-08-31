@@ -21,14 +21,15 @@ namespace ClinicaVeterinaria.Repositories
 
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
+                    cmd.Parameters.Add("ID", SqlDbType.Int).Value = id;
+
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        cmd.Parameters.Add("ID", SqlDbType.Int).Value = id;
-
-                        reader.Read();
-
-                        entity.id = (int)reader["ID"];
-                        entity.tipo = (string)reader["TIPO"];
+                        if (reader.Read())
+                        {
+                            entity.id = (int)reader["ID"];
+                            entity.tipo = (string)reader["TIPO"];
+                        }
                     }
                 }
             }
@@ -65,7 +66,6 @@ namespace ClinicaVeterinaria.Repositories
 
         }
 
-        //[Microsoft.AspNetCore.Mvc
         public TipoAnimal Insert([FromForm] TipoAnimal entity)
         {
             using(SqlConnection conn = Conexao.GetConection())
@@ -103,6 +103,8 @@ namespace ClinicaVeterinaria.Repositories
                     cmd.ExecuteNonQuery();
                 }
             }
+
+            entity.id = id;
 
             return entity;
         }

@@ -7,17 +7,17 @@ using System.Data.SqlClient;
 
 namespace ClinicaVeterinaria.Repositories
 {
-    public class ClienteRepository
+    public class AnimalRepository
     {
-        public Cliente GetById(int id)
+        public Animal GetById(int id)
         {
-            Cliente entity = new Cliente();
+            Animal entity = new Animal();
 
             using (SqlConnection conn = Conexao.GetConection())
             {
                 conn.Open();
 
-                string sql = "SELECT * FROM CLIENTES WHERE ID = @ID";
+                string sql = "SELECT * FROM ANIMAIS WHERE ID = @ID";
 
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
@@ -29,9 +29,10 @@ namespace ClinicaVeterinaria.Repositories
                         {
                             entity.id = (int)reader["ID"];
                             entity.nome = (string)reader["NOME"];
-                            entity.cpf = (string)reader["CPF"];
-                            entity.email = (string)reader["EMAIL"];
-                            entity.celular = (string)reader["CELULAR"];
+                            entity.raca = (string)reader["RACA"];
+                            entity.dtNascimento = (DateTime)reader["DTNASC"];
+                            entity.clienteId = (int)reader["IDCLIENTE"];
+                            entity.tipoAnimalId = (int)reader["IDTIPOANIMAL"];
                         }
                     }
                 }
@@ -40,15 +41,15 @@ namespace ClinicaVeterinaria.Repositories
             return entity;
         }
 
-        public List<Cliente> GetAll()
+        public List<Animal> GetAll()
         {
-            List<Cliente> lista = new List<Cliente>();
+            List<Animal> lista = new List<Animal>();
 
             using(SqlConnection conn = Conexao.GetConection())
             {
                 conn.Open();
 
-                string sql = "SELECT * FROM CLIENTES";
+                string sql = "SELECT * FROM ANIMAIS";
 
                 using(SqlCommand cmd = new SqlCommand(sql, conn))
                 {
@@ -56,14 +57,15 @@ namespace ClinicaVeterinaria.Repositories
                     {
                         while (reader.Read())
                         {
-                            lista.Add(new Cliente
+                            lista.Add(new Animal
                             {
                                 id = (int)reader["ID"],
                                 nome = (string)reader["NOME"],
-                                cpf = (string)reader["CPF"],
-                                email = (string)reader["EMAIL"],
-                                celular = (string)reader["CELULAR"],
-                            });
+                                raca = (string)reader["RACA"],
+                                dtNascimento = (DateTime)reader["DTNASC"],
+                                clienteId = (int)reader["IDCLIENTE"],
+                                tipoAnimalId = (int)reader["IDTIPOANIMAL"]
+                        });
                         }
                     }
                 }
@@ -72,21 +74,22 @@ namespace ClinicaVeterinaria.Repositories
             return lista;
         }
 
-        public Cliente Insert(Cliente entity)
+        public Animal Insert(Animal entity)
         {
             using(SqlConnection conn = Conexao.GetConection())
             {
                 conn.Open();
 
-                string sql = "INSERT INTO CLIENTES (NOME, CPF, EMAIL, CELULAR) " +
-                             "VALUES (@NOME, @CPF, @EMAIL, @CELULAR)";
+                string sql = "INSERT INTO ANIMAIS (NOME, RACA, DTNASC, IDCLIENTE, IDTIPOANIMAL) " +
+                             "VALUES (@NOME, @RACA, @DTNASC, @IDCLIENTE, @IDTIPOANIMAL)";
 
                 using(SqlCommand cmd = new SqlCommand(sql, conn))
                 {
                     cmd.Parameters.Add("NOME", SqlDbType.NVarChar).Value = entity.nome;
-                    cmd.Parameters.Add("CPF", SqlDbType.NVarChar).Value = entity.cpf;
-                    cmd.Parameters.Add("EMAIL", SqlDbType.NVarChar).Value = (entity.email == null ? DBNull.Value : entity.email); 
-                    cmd.Parameters.Add("CELULAR", SqlDbType.NVarChar).Value = (entity.celular == null ? DBNull.Value : entity.celular);
+                    cmd.Parameters.Add("RACA", SqlDbType.NVarChar).Value = entity.raca;
+                    cmd.Parameters.Add("DTNASC", SqlDbType.DateTime).Value = entity.dtNascimento;
+                    cmd.Parameters.Add("IDCLIENTE", SqlDbType.Int).Value = entity.clienteId;
+                    cmd.Parameters.Add("IDTIPOANIMAL", SqlDbType.Int).Value = entity.tipoAnimalId;
 
                     cmd.ExecuteNonQuery();
                 }
@@ -95,26 +98,28 @@ namespace ClinicaVeterinaria.Repositories
             return entity;
         }
 
-        public Cliente Update(int id, Cliente entity)
+        public Animal Update(int id, Animal entity)
         {
             using (SqlConnection conn = Conexao.GetConection())
             {
                 conn.Open();
 
-                string sql = "UPDATE CLIENTES " +
+                string sql = "UPDATE ANIMAIS " +
                              "SET NOME = @NOME, " +
-                                 "CPF = @CPF, " +
-                                 "EMAIL = @EMAIL, " + 
-                                 "CELULAR = @CELULAR " +
+                                 "RACA = @RACA, " +
+                                 "DTNASC = @DTNASC, " + 
+                                 "IDCLIENTE = @IDCLIENTE, " +
+                                 "IDTIPOANIMAL = @IDTIPOANIMAL " +
                              "WHERE ID = @ID";
 
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
                     cmd.Parameters.Add("ID", SqlDbType.Int).Value = id;
                     cmd.Parameters.Add("NOME", SqlDbType.NVarChar).Value = entity.nome;
-                    cmd.Parameters.Add("CPF", SqlDbType.NVarChar).Value = entity.cpf;
-                    cmd.Parameters.Add("EMAIL", SqlDbType.NVarChar).Value = (entity.email == null ? DBNull.Value : entity.email);
-                    cmd.Parameters.Add("CELULAR", SqlDbType.NVarChar).Value = (entity.celular == null ? DBNull.Value : entity.celular);
+                    cmd.Parameters.Add("RACA", SqlDbType.NVarChar).Value = entity.raca;
+                    cmd.Parameters.Add("DTNASC", SqlDbType.DateTime).Value = entity.dtNascimento;
+                    cmd.Parameters.Add("IDCLIENTE", SqlDbType.Int).Value = entity.clienteId;
+                    cmd.Parameters.Add("IDTIPOANIMAL", SqlDbType.Int).Value = entity.tipoAnimalId;
 
                     cmd.ExecuteNonQuery();
                 }
@@ -131,7 +136,7 @@ namespace ClinicaVeterinaria.Repositories
             {
                 conn.Open();
 
-                string sql = "DELETE CLIENTES " +
+                string sql = "DELETE ANIMAIS " +
                              "WHERE ID = @ID";
 
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
