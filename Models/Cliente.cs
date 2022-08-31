@@ -7,7 +7,6 @@ namespace ClinicaVeterinaria.Models
 {
     public class Cliente: Pessoa
     {
-        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-        public List<Animal> animals { get; set; }
+        
     }
 }

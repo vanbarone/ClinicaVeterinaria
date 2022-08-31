@@ -19,10 +19,10 @@ namespace ClinicaVeterinaria.Models
         public DateTime dtNascimento { get; set; }
 
         [Required(ErrorMessage = "Tipo do Animal não informado")]
-        public int tipoAnimalId
+        public int tipoAnimalId 
         {
             get { return tipoAnimal.id; }
-            
+
             set {
                 TipoAnimalRepository repo = new TipoAnimalRepository();
 
@@ -49,6 +49,5 @@ namespace ClinicaVeterinaria.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
         public Cliente cliente { get; set; }
 
-        public string Imagem { get; set; }
     }
 }

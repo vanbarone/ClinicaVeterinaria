@@ -8,7 +8,12 @@ namespace ClinicaVeterinaria.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
         public int id { get; set; }
 
+        
         [Required(ErrorMessage ="Tipo não informado")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string tipo { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string Imagem { get; set; }
     }
 }

@@ -1,5 +1,7 @@
-﻿using ClinicaVeterinaria.Models;
+﻿using APIMaisEventos.Utils;
+using ClinicaVeterinaria.Models;
 using ClinicaVeterinaria.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
@@ -12,13 +14,25 @@ namespace ClinicaVeterinaria.Controllers
         TipoAnimalRepository repo = new TipoAnimalRepository();
 
         [HttpPost]
-        public IActionResult Inserir(TipoAnimal entidade)
+        public IActionResult Inserir([FromForm] TipoAnimal entity, IFormFile arquivo)
         {
             try
             {
-                entidade = repo.Insert(entidade);
+                #region Upload de imagem
+                string[] extensoesPermitidas = { "jpeg", "jpg", "png", "svg" };
+                string uploadResultado = Upload.UploadFile(arquivo, "Images", extensoesPermitidas);
 
-                return Ok(entidade);
+                if (uploadResultado == "")
+                {
+                    return BadRequest("Arquivo não encontrado ou extensão não permitida ");
+                }
+
+                entity.Imagem = uploadResultado;
+                #endregion
+
+                entity = repo.Insert(entity);
+
+                return Ok(entity);
             }
             catch (System.Exception ex)
             {
@@ -42,13 +56,25 @@ namespace ClinicaVeterinaria.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Alterar(int id, TipoAnimal entidade)
+        public IActionResult Alterar(int id, [FromForm] TipoAnimal entity, IFormFile arquivo)
         {
             try
             {
-                entidade = repo.Update(id, entidade);
+                #region Upload de imagem
+                    string[] extensoesPermitidas = { "jpeg", "jpg", "png", "svg" };
+                    string uploadResultado = Upload.UploadFile(arquivo, "Images", extensoesPermitidas);
 
-                return Ok(entidade);
+                    if (uploadResultado == "")
+                    {
+                        return BadRequest("Arquivo não encontrado ou extensão não permitida ");
+                    }
+
+                    entity.Imagem = uploadResultado;
+                #endregion
+
+                entity = repo.Update(id, entity);
+
+                return Ok(entity);
             }
             catch (System.Exception ex)
             {

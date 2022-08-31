@@ -14,22 +14,10 @@ namespace ClinicaVeterinaria.Controllers
         AnimalRepository repo = new AnimalRepository();
 
         [HttpPost]
-        public IActionResult Inserir([FromForm] Animal entity, IFormFile arquivo)
+        public IActionResult Inserir(Animal entity)
         {
             try
             {
-                #region Upload de imagem
-                string[] extensoesPermitidas = { "jpeg", "jpg", "png", "svg" };
-                string uploadResultado = Upload.UploadFile(arquivo, "Images", extensoesPermitidas);
-
-                if (uploadResultado == "")
-                {
-                    return BadRequest("Arquivo não encontrado ou extensão não permitida ");
-                }
-
-                entity.Imagem = uploadResultado;
-                #endregion
-
                 entity = repo.Insert(entity);
 
                 return Ok(entity);
@@ -61,18 +49,6 @@ namespace ClinicaVeterinaria.Controllers
         {
             try
             {
-                #region Upload de imagem
-                string[] extensoesPermitidas = { "jpeg", "jpg", "png", "svg" };
-                string uploadResultado = Upload.UploadFile(arquivo, "Images", extensoesPermitidas);
-
-                if (uploadResultado == "")
-                {
-                    return BadRequest("Arquivo não encontrado ou extensão não permitida ");
-                }
-
-                entity.Imagem = uploadResultado;
-                #endregion
-
                 entity = repo.Update(id, entity);
                 
                 return Ok(entity);
