@@ -1,9 +1,11 @@
 ﻿using ClinicaVeterinaria.Models;
 using ClinicaVeterinaria.Utils;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ClinicaVeterinaria.Repositories
 {
@@ -29,6 +31,7 @@ namespace ClinicaVeterinaria.Repositories
                         {
                             entity.id = (int)reader["ID"];
                             entity.tipo = (string)reader["TIPO"];
+                            entity.imagem = (reader["IMAGEM"] == DBNull.Value ? "" : (string)reader["IMAGEM"]);
                         }
                     }
                 }
@@ -55,8 +58,9 @@ namespace ClinicaVeterinaria.Repositories
                         {
                             lista.Add(new TipoAnimal { 
                                         id = (int)reader["ID"],
-                                        tipo = (string)reader["TIPO"] 
-                            }) ;
+                                        tipo = (string)reader["TIPO"],
+                                        imagem = (reader["IMAGEM"] == DBNull.Value ? "": (string)reader["IMAGEM"])
+                        }) ;
                         }
                     }
                 }
@@ -72,11 +76,12 @@ namespace ClinicaVeterinaria.Repositories
             {
                 conn.Open();
 
-                string sql = "INSERT INTO TIPOANIMAIS (TIPO) VALUES (@TIPO)";
+                string sql = "INSERT INTO TIPOANIMAIS (TIPO, IMAGEM) VALUES (@TIPO, @IMAGEM)";
 
                 using(SqlCommand cmd = new SqlCommand(sql, conn))
                 {
                     cmd.Parameters.Add("TIPO", SqlDbType.NVarChar).Value = entity.tipo;
+                    cmd.Parameters.Add("IMAGEM", SqlDbType.NVarChar).Value = entity.imagem;
 
                     cmd.ExecuteNonQuery();
                 }
@@ -92,13 +97,15 @@ namespace ClinicaVeterinaria.Repositories
                 conn.Open();
 
                 string sql = "UPDATE TIPOANIMAIS " +
-                                "SET TIPO = @TIPO " +
+                                "SET TIPO = @TIPO, " +
+                                    "IMAGEM = @IMAGEM " +
                                 "WHERE ID = @ID";
 
                 using(SqlCommand cmd = new SqlCommand(sql, conn))
                 {
                     cmd.Parameters.Add("ID", SqlDbType.Int).Value = id;
                     cmd.Parameters.Add("TIPO", SqlDbType.NVarChar).Value = entity.tipo;
+                    cmd.Parameters.Add("IMAGEM", SqlDbType.NVarChar).Value = entity.imagem;
 
                     cmd.ExecuteNonQuery();
                 }

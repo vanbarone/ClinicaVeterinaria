@@ -2,7 +2,6 @@
 using System;
 using System.IO;
 using System.Net.Http.Headers;
-using System.Reflection.Metadata.Ecma335;
 
 namespace APIMaisEventos.Utils
 {
@@ -18,7 +17,7 @@ namespace APIMaisEventos.Utils
                 string path = Path.Combine(Directory.GetCurrentDirectory(), pasta);
 
                 //verifica se algum arquivo foi informado
-                if (arquivo.Length > 0)
+                if (arquivo != null)
                 {
                     //pega o nome do arquivo
                     string nomeArquivo = ContentDispositionHeaderValue.Parse(arquivo.ContentDisposition).FileName.Trim('"');

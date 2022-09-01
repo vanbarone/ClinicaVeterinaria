@@ -14,6 +14,6 @@ namespace ClinicaVeterinaria.Models
         public string tipo { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string Imagem { get; set; }
+        public string imagem { get; set; }
     }
 }
