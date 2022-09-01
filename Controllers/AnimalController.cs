@@ -45,7 +45,7 @@ namespace ClinicaVeterinaria.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Atualizar(int id, [FromForm] Animal entity, IFormFile arquivo)
+        public IActionResult Atualizar(int id, Animal entity)
         {
             try
             {

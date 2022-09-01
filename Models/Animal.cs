@@ -16,17 +16,19 @@ namespace ClinicaVeterinaria.Models
         [Required(ErrorMessage = "Raça não informada")]
         public string raca { get; set; }
 
+        [Required(ErrorMessage = "Data de nascimento não informada")]
         public DateTime dtNascimento { get; set; }
 
         [Required(ErrorMessage = "Tipo do Animal não informado")]
         public int tipoAnimalId 
         {
-            get { return tipoAnimal.id; }
+            get { return tipoAnimal?.id ?? 0; }
 
             set {
                 TipoAnimalRepository repo = new TipoAnimalRepository();
 
-                tipoAnimal = repo.GetById(value);
+                if (value != 0)
+                    tipoAnimal = repo.GetById(value);
             } 
         }
 
@@ -36,13 +38,14 @@ namespace ClinicaVeterinaria.Models
         [Required(ErrorMessage = "Cliente não informado")]
         public int clienteId
         {
-            get { return cliente.id; }
+            get { return cliente?.id ?? 0; }
 
             set
             {
                 ClienteRepository repo = new ClienteRepository();
 
-                cliente = repo.GetById(value);
+                if (value != 0)
+                    cliente = repo.GetById(value);
             }
         }
 

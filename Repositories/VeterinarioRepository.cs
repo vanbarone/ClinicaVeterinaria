@@ -30,8 +30,8 @@ namespace ClinicaVeterinaria.Repositories
                             entity.id = (int)reader["ID"];
                             entity.nome = (string)reader["NOME"];
                             entity.cpf = (string)reader["CPF"];
-                            entity.email = (string)reader["EMAIL"];
-                            entity.celular = (string)reader["CELULAR"];
+                            entity.email = (reader["EMAIL"] == DBNull.Value ? "" : (string)reader["EMAIL"]);
+                            entity.celular = (reader["CELULAR"] == DBNull.Value ? "" : (string)reader["CELULAR"]);
                             entity.crv = (string)reader["CRV"];
                         }
                     }
@@ -62,8 +62,8 @@ namespace ClinicaVeterinaria.Repositories
                                 id = (int)reader["ID"],
                                 nome = (string)reader["NOME"],
                                 cpf = (string)reader["CPF"],
-                                email = (string)reader["EMAIL"],
-                                celular = (string)reader?["CELULAR"],
+                                email = (reader["EMAIL"] == DBNull.Value ? "" : (string)reader["EMAIL"]),
+                                celular = (reader["CELULAR"] == DBNull.Value ? "" : (string)reader["CELULAR"]),
                                 crv = (string)reader["CRV"]
                             });
                         }
@@ -74,6 +74,29 @@ namespace ClinicaVeterinaria.Repositories
             return lista;
         }
 
+        public int GetMaxId()
+        {
+            using (SqlConnection conn = Conexao.GetConection())
+            {
+                conn.Open();
+
+                string sql = "SELECT MAX(ID) FROM VETERINARIOS";
+
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return (int)reader[0];
+                        }
+                    }
+                }
+            }
+
+            return 0;
+        }
+        
         public Veterinario Insert(Veterinario entity)
         {
             using(SqlConnection conn = Conexao.GetConection())
@@ -92,6 +115,8 @@ namespace ClinicaVeterinaria.Repositories
                     cmd.Parameters.Add("CRV", SqlDbType.NVarChar).Value = entity.crv;
 
                     cmd.ExecuteNonQuery();
+
+                    entity.id = GetMaxId();
                 }
             }
 

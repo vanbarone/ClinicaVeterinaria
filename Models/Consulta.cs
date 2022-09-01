@@ -13,13 +13,14 @@ namespace ClinicaVeterinaria.Models
 
         [Required(ErrorMessage = "Animal não informado")]
         public int animalId {
-            get { return animal.id; }
-
+            get { return animal?.id ?? 0; }
+            
             set
             {
                 AnimalRepository repo = new AnimalRepository();
 
-                animal = repo.GetById(value);
+                if (value != 0)
+                    animal = repo.GetById(value);
             }
         }
 
@@ -29,13 +30,14 @@ namespace ClinicaVeterinaria.Models
         [Required(ErrorMessage = "Veterinário não informado")]
         public int veterinarioId
         {
-            get { return veterinario.id; }
+            get { return veterinario?.id ?? 0; }
 
             set
             {
                 VeterinarioRepository repo = new VeterinarioRepository();
 
-                veterinario = repo.GetById(value);
+                if (value != 0)
+                    veterinario = repo.GetById(value);
             }
         }
 

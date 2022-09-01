@@ -70,6 +70,29 @@ namespace ClinicaVeterinaria.Repositories
 
         }
 
+        public int GetMaxId()
+        {
+            using (SqlConnection conn = Conexao.GetConection())
+            {
+                conn.Open();
+
+                string sql = "SELECT MAX(ID) FROM TIPOANIMAIS";
+
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return (int)reader[0];
+                        }
+                    }
+                }
+            }
+
+            return 0;
+        }
+
         public TipoAnimal Insert([FromForm] TipoAnimal entity)
         {
             using(SqlConnection conn = Conexao.GetConection())
@@ -84,6 +107,8 @@ namespace ClinicaVeterinaria.Repositories
                     cmd.Parameters.Add("IMAGEM", SqlDbType.NVarChar).Value = entity.imagem;
 
                     cmd.ExecuteNonQuery();
+
+                    entity.id = GetMaxId();
                 }
             }
 

@@ -74,9 +74,38 @@ namespace ClinicaVeterinaria.Repositories
             return lista;
         }
 
+        public int GetMaxId()
+        {
+            using (SqlConnection conn = Conexao.GetConection())
+            {
+                conn.Open();
+
+                string sql = "SELECT MAX(ID) FROM ANIMAIS";
+
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return (int)reader[0];
+                        }
+                    }
+                }
+            }
+
+            return 0;
+        }
+
         public Animal Insert(Animal entity)
         {
-            using(SqlConnection conn = Conexao.GetConection())
+            if (entity.clienteId == 0)
+                throw new Exception("Id do cliente não informado");
+
+            if (entity.tipoAnimalId == 0)
+                throw new Exception("Id do tipo do animal não informado");
+
+            using (SqlConnection conn = Conexao.GetConection())
             {
                 conn.Open();
 
@@ -92,6 +121,8 @@ namespace ClinicaVeterinaria.Repositories
                     cmd.Parameters.Add("IDTIPOANIMAL", SqlDbType.Int).Value = entity.tipoAnimalId;
 
                     cmd.ExecuteNonQuery();
+
+                    entity.id = GetMaxId();
                 }
             }
 
@@ -100,6 +131,12 @@ namespace ClinicaVeterinaria.Repositories
 
         public Animal Update(int id, Animal entity)
         {
+            if (entity.clienteId == 0)
+                throw new Exception("Id do cliente não informado");
+
+            if (entity.tipoAnimalId == 0)
+                throw new Exception("Id do tipo do animal não informado");
+
             using (SqlConnection conn = Conexao.GetConection())
             {
                 conn.Open();

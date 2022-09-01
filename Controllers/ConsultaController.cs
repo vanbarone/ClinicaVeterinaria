@@ -12,7 +12,7 @@ namespace ClinicaVeterinaria.Controllers
         ConsultaRepository repo = new ConsultaRepository();
 
         [HttpPost]
-        public IActionResult Inserir([FromForm] Consulta entity)
+        public IActionResult Inserir(Consulta entity)
         {
             try
             {

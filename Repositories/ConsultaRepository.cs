@@ -4,14 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 
 namespace ClinicaVeterinaria.Repositories
 {
     public class ConsultaRepository
     {
-        private AnimalRepository repoAnimal = new AnimalRepository();
-        private VeterinarioRepository repoVeterinario = new VeterinarioRepository();
-
         public Consulta GetById(int id)
         {
             Consulta entity = new Consulta();
@@ -32,12 +30,12 @@ namespace ClinicaVeterinaria.Repositories
                         {
                             entity.id = (int)reader["ID"];
                             entity.data = (DateTime)reader["DTCONSULTA"];
-                            entity.peso = (float)reader["PESO"];
-                            entity.sintomas = (string)reader["SINTOMAS"];
-                            entity.diagnostico = (string)reader["DIAGNOSTICO"];
-                            entity.valor = (decimal)reader["VALOR"];
-                            entity.animal = repoAnimal.GetById((int)reader["IDANIMAL"]);
-                            entity.veterinario = repoVeterinario.GetById((int)reader["IDVETERINARIO"]);
+                            entity.peso = (reader["PESO"] == DBNull.Value ? 0 : (double)reader["PESO"]);
+                            entity.sintomas = (reader["SINTOMAS"] == DBNull.Value ? "" : (string)reader["SINTOMAS"]);
+                            entity.diagnostico = (reader["DIAGNOSTICO"] == DBNull.Value ? "" : (string)reader["DIAGNOSTICO"]);
+                            entity.valor = (reader["VALOR"] == DBNull.Value ? 0 : (decimal)reader["VALOR"]);
+                            entity.animalId = (int)reader["IDANIMAL"];
+                            entity.veterinarioId = (int)reader["IDVETERINARIO"];
                         }
                     }
                 }
@@ -66,12 +64,12 @@ namespace ClinicaVeterinaria.Repositories
                             {
                                 id = (int)reader["ID"],
                                 data = (DateTime)reader["DTCONSULTA"],
-                                peso = (double)reader["PESO"],
-                                sintomas = (string)reader["SINTOMAS"],
-                                diagnostico = (string)reader["DIAGNOSTICO"],
-                                valor = (decimal)reader["VALOR"],
-                                animal = repoAnimal.GetById((int)reader["IDANIMAL"]),
-                                veterinario = repoVeterinario.GetById((int)reader["IDVETERINARIO"])
+                                peso = (reader["PESO"] == DBNull.Value ? 0 : (double)reader["PESO"]),
+                                sintomas = (reader["SINTOMAS"] == DBNull.Value ? "" : (string)reader["SINTOMAS"]),
+                                diagnostico = (reader["DIAGNOSTICO"] == DBNull.Value ? "" : (string)reader["DIAGNOSTICO"]),
+                                valor = (reader["VALOR"] == DBNull.Value ? 0 : (decimal)reader["VALOR"]),
+                                animalId = (int)reader["IDANIMAL"],
+                                veterinarioId = (int)reader["IDVETERINARIO"]
                         });
                         }
                     }
@@ -81,9 +79,38 @@ namespace ClinicaVeterinaria.Repositories
             return lista;
         }
 
+        public int GetMaxId()
+        {
+            using (SqlConnection conn = Conexao.GetConection())
+            {
+                conn.Open();
+
+                string sql = "SELECT MAX(ID) FROM CONSULTAS";
+
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return (int)reader[0];
+                        }
+                    }
+                }
+            }
+
+            return 0;
+        }
+
         public Consulta Insert(Consulta entity)
         {
-            using(SqlConnection conn = Conexao.GetConection())
+            if (entity.animalId == 0)
+                throw new Exception("Id do animal não informado");
+
+            if (entity.veterinarioId == 0)
+                throw new Exception("Id do veterinário não informado");
+
+            using (SqlConnection conn = Conexao.GetConection())
             {
                 conn.Open();
 
@@ -95,12 +122,14 @@ namespace ClinicaVeterinaria.Repositories
                     cmd.Parameters.Add("IDANIMAL", SqlDbType.Int).Value = entity.animal.id;
                     cmd.Parameters.Add("IDVETERINARIO", SqlDbType.Int).Value = entity.veterinario.id;
                     cmd.Parameters.Add("DTCONSULTA", SqlDbType.DateTime).Value = entity.data;
-                    cmd.Parameters.Add("PESO", SqlDbType.Float).Value = entity.peso;
-                    cmd.Parameters.Add("SINTOMAS", SqlDbType.NVarChar).Value = entity.sintomas;
-                    cmd.Parameters.Add("DIAGNOSTICO", SqlDbType.NVarChar).Value = entity.diagnostico;
-                    cmd.Parameters.Add("VALOR", SqlDbType.Float).Value = entity.valor;
+                    cmd.Parameters.Add("PESO", SqlDbType.Float).Value = entity?.peso ?? 0;
+                    cmd.Parameters.Add("SINTOMAS", SqlDbType.NVarChar).Value = entity?.sintomas ?? "";
+                    cmd.Parameters.Add("DIAGNOSTICO", SqlDbType.NVarChar).Value = entity?.diagnostico ?? "";
+                    cmd.Parameters.Add("VALOR", SqlDbType.Float).Value = entity?.valor ?? 0;
 
                     cmd.ExecuteNonQuery();
+
+                    entity.id = GetMaxId();
                 }
             }
 
@@ -109,6 +138,12 @@ namespace ClinicaVeterinaria.Repositories
 
         public Consulta Update(int id, Consulta entity)
         {
+            if (entity.animalId == 0)
+                throw new Exception("Id do animal não informado");
+
+            if (entity.veterinarioId == 0)
+                throw new Exception("Id do veterinário não informado");
+
             using (SqlConnection conn = Conexao.GetConection())
             {
                 conn.Open();
@@ -129,10 +164,10 @@ namespace ClinicaVeterinaria.Repositories
                     cmd.Parameters.Add("IDANIMAL", SqlDbType.Int).Value = entity.animal.id;
                     cmd.Parameters.Add("IDVETERINARIO", SqlDbType.Int).Value = entity.veterinario.id;
                     cmd.Parameters.Add("DTCONSULTA", SqlDbType.DateTime).Value = entity.data;
-                    cmd.Parameters.Add("PESO", SqlDbType.Float).Value = entity.peso;
-                    cmd.Parameters.Add("SINTOMAS", SqlDbType.NVarChar).Value = entity.sintomas;
-                    cmd.Parameters.Add("DIAGNOSTICO", SqlDbType.NVarChar).Value = entity.diagnostico;
-                    cmd.Parameters.Add("VALOR", SqlDbType.Float).Value = entity.valor;
+                    cmd.Parameters.Add("PESO", SqlDbType.Float).Value = entity?.peso ?? 0;
+                    cmd.Parameters.Add("SINTOMAS", SqlDbType.NVarChar).Value = entity?.sintomas ?? "";
+                    cmd.Parameters.Add("DIAGNOSTICO", SqlDbType.NVarChar).Value = entity?.diagnostico ?? "";
+                    cmd.Parameters.Add("VALOR", SqlDbType.Float).Value = entity?.valor ?? 0;
 
                     cmd.ExecuteNonQuery();
                 }
