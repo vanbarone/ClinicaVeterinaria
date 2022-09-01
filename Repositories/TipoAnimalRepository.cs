@@ -11,6 +11,7 @@ namespace ClinicaVeterinaria.Repositories
 {
     public class TipoAnimalRepository
     {
+        // Pega o objeto pelo id
         public TipoAnimal GetById(int id)
         {
             TipoAnimal entity = new TipoAnimal();
@@ -40,6 +41,7 @@ namespace ClinicaVeterinaria.Repositories
             return entity;
         }
 
+        //Lista todos os tipos de animais
         public List<TipoAnimal> GetAll()
         {
             List<TipoAnimal> lista = new List<TipoAnimal>();
@@ -70,6 +72,7 @@ namespace ClinicaVeterinaria.Repositories
 
         }
 
+        //Pega o maior id da tabela, uso isso pra saber o id do último objeto inserido
         public int GetMaxId()
         {
             using (SqlConnection conn = Conexao.GetConection())
@@ -93,6 +96,7 @@ namespace ClinicaVeterinaria.Repositories
             return 0;
         }
 
+        //médoto responsável pela inserção
         public TipoAnimal Insert([FromForm] TipoAnimal entity)
         {
             using(SqlConnection conn = Conexao.GetConection())
@@ -108,13 +112,14 @@ namespace ClinicaVeterinaria.Repositories
 
                     cmd.ExecuteNonQuery();
 
-                    entity.id = GetMaxId();
+                    entity.id = GetMaxId(); //pega o id do objeto inserido
                 }
             }
 
             return entity;
         }
 
+        //médoto responsável pela alteração
         public TipoAnimal Update(int id, TipoAnimal entity)
         {
             using(SqlConnection conn = Conexao.GetConection())
@@ -141,6 +146,7 @@ namespace ClinicaVeterinaria.Repositories
             return entity;
         }
 
+        //médoto responsável pela exclusão
         public bool Delete(int id)
         {
             using(SqlConnection conn = Conexao.GetConection())

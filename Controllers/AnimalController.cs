@@ -13,6 +13,11 @@ namespace ClinicaVeterinaria.Controllers
     {
         AnimalRepository repo = new AnimalRepository();
 
+        /// <summary>
+        /// Cadastra um novo animal
+        /// </summary>
+        /// <param name="entity">Objeto 'Animal' que deve ser inserido</param>
+        /// <returns>Objeto 'Animal' que foi inserido</returns>
         [HttpPost]
         public IActionResult Inserir(Animal entity)
         {
@@ -28,6 +33,10 @@ namespace ClinicaVeterinaria.Controllers
             }
         }
 
+        /// <summary>
+        /// Lista todos os animais cadastrados
+        /// </summary>
+        /// <returns>Lista de Animais</returns>
         [HttpGet]
         public IActionResult Listar()
         {
@@ -44,6 +53,12 @@ namespace ClinicaVeterinaria.Controllers
             }
         }
 
+        /// <summary>
+        /// Altera os dados de um animal
+        /// </summary>
+        /// <param name="id">id do animal que deve ser alterado</param>
+        /// <param name="entity">Objeto 'Animal' que deve ser alterado</param>
+        /// <returns>Objeto 'Animal' que foi alterado</returns>
         [HttpPut("{id}")]
         public IActionResult Atualizar(int id, Animal entity)
         {
@@ -60,6 +75,11 @@ namespace ClinicaVeterinaria.Controllers
             }
         }
 
+        /// <summary>
+        /// Exclui um animal
+        /// </summary>
+        /// <param name="id">id do animal que erá excluído</param>
+        /// <returns>Mensagem de exclusão com sucesso se conseguiu fazer a exclusão</returns>
         [HttpDelete("{id}")]
         public IActionResult Deletar(int id)
         {

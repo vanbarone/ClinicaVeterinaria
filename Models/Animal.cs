@@ -7,7 +7,7 @@ namespace ClinicaVeterinaria.Models
 {
     public class Animal
     {
-        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]     //não mostra esse campo no json na inserção e alteração
         public int id { get; set; }
 
         [Required(ErrorMessage = "Nome não informado")]
@@ -22,13 +22,13 @@ namespace ClinicaVeterinaria.Models
         [Required(ErrorMessage = "Tipo do Animal não informado")]
         public int tipoAnimalId 
         {
-            get { return tipoAnimal?.id ?? 0; }
+            get { return tipoAnimal?.id ?? 0; } //se o objeto for nulo pega o valor default
 
             set {
                 TipoAnimalRepository repo = new TipoAnimalRepository();
 
                 if (value != 0)
-                    tipoAnimal = repo.GetById(value);
+                    tipoAnimal = repo.GetById(value);   //carrega os dados do objeto tipoAnimal
             } 
         }
 
@@ -38,14 +38,14 @@ namespace ClinicaVeterinaria.Models
         [Required(ErrorMessage = "Cliente não informado")]
         public int clienteId
         {
-            get { return cliente?.id ?? 0; }
+            get { return cliente?.id ?? 0; }    //se o objeto for nulo pega o valor default
 
             set
             {
                 ClienteRepository repo = new ClienteRepository();
 
                 if (value != 0)
-                    cliente = repo.GetById(value);
+                    cliente = repo.GetById(value);  //carrega os dados do objeto cliente
             }
         }
 

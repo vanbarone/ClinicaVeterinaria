@@ -11,6 +11,11 @@ namespace ClinicaVeterinaria.Controllers
     {
         ConsultaRepository repo = new ConsultaRepository();
 
+        /// <summary>
+        /// Cadastra uma nova consulta
+        /// </summary>
+        /// <param name="entity">Objeto 'Consulta' que deve ser inserido</param>
+        /// <returns>Objeto 'Consulta' que foi inserido</returns>
         [HttpPost]
         public IActionResult Inserir(Consulta entity)
         {
@@ -26,6 +31,10 @@ namespace ClinicaVeterinaria.Controllers
             }
         }
 
+        /// <summary>
+        /// Lista todas as consultas cadastradas
+        /// </summary>
+        /// <returns>Lista de Consultas</returns>
         [HttpGet]
         public IActionResult Listar()
         {
@@ -42,6 +51,12 @@ namespace ClinicaVeterinaria.Controllers
             }
         }
 
+        /// <summary>
+        /// Altera os dados de uma consulta
+        /// </summary>
+        /// <param name="id">id da consulta que deve ser alterada</param>
+        /// <param name="entity">Objeto 'Consulta' que deve ser alterado</param>
+        /// <returns>Objeto 'Consulta' que foi alterado</returns>
         [HttpPut("{id}")]
         public IActionResult Atualizar(int id, Consulta entity)
         {
@@ -58,6 +73,11 @@ namespace ClinicaVeterinaria.Controllers
             }
         }
 
+        /// <summary>
+        /// Exclui uma consulta
+        /// </summary>
+        /// <param name="id">id da consulta que erá excluída</param>
+        /// <returns>Mensagem de exclusão com sucesso se conseguiu fazer a exclusão</returns>
         [HttpDelete("{id}")]
         public IActionResult Deletar(int id)
         {

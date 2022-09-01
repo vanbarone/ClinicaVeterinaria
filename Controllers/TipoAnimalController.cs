@@ -13,6 +13,11 @@ namespace ClinicaVeterinaria.Controllers
     {
         TipoAnimalRepository repo = new TipoAnimalRepository();
 
+        /// <summary>
+        /// Cadastra um novo tipo de animal
+        /// </summary>
+        /// <param name="entity">Objeto 'TipoAnimal' que deve ser inserido</param>
+        /// <returns>Objeto 'TipoAnimal' que foi inserido</returns>
         [HttpPost]
         public IActionResult Inserir([FromForm] TipoAnimal entity, IFormFile arquivo)
         {
@@ -35,6 +40,10 @@ namespace ClinicaVeterinaria.Controllers
             }
         }
 
+        /// <summary>
+        /// Lista todos os tipos de animais cadastrados
+        /// </summary>
+        /// <returns>Lista de Tipo de Animais</returns>
         [HttpGet]
         public IActionResult Listar()
         {
@@ -50,6 +59,12 @@ namespace ClinicaVeterinaria.Controllers
             }
         }
 
+        /// <summary>
+        /// Altera os dados de um tipo de animal
+        /// </summary>
+        /// <param name="id">id do tipoAnimal que deve ser alterado</param>
+        /// <param name="entity">Objeto 'TipoAnimal' que deve ser alterado</param>
+        /// <returns>Objeto 'TipoAnimal' que foi alterado</returns>
         [HttpPut("{id}")]
         public IActionResult Alterar(int id, [FromForm] TipoAnimal entity, IFormFile arquivo)
         {
@@ -72,6 +87,11 @@ namespace ClinicaVeterinaria.Controllers
             }
         }
 
+        /// <summary>
+        /// Exclui um tipo de animal
+        /// </summary>
+        /// <param name="id">id do tipoAnimal que erá excluído</param>
+        /// <returns>Mensagem de exclusão com sucesso se conseguiu fazer a exclusão</returns>
         [HttpDelete("{id}")]
         public IActionResult Deletar(int id)
         {

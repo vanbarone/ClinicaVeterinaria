@@ -4,12 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
 
 namespace ClinicaVeterinaria.Repositories
 {
     public class ConsultaRepository
     {
+        // Pega o objeto pelo id
         public Consulta GetById(int id)
         {
             Consulta entity = new Consulta();
@@ -44,6 +44,7 @@ namespace ClinicaVeterinaria.Repositories
             return entity;
         }
 
+        //Lista todas as consultas
         public List<Consulta> GetAll()
         {
             List<Consulta> lista = new List<Consulta>();
@@ -79,6 +80,7 @@ namespace ClinicaVeterinaria.Repositories
             return lista;
         }
 
+        //Pega o maior id da tabela, uso isso pra saber o id do último objeto inserido
         public int GetMaxId()
         {
             using (SqlConnection conn = Conexao.GetConection())
@@ -102,8 +104,10 @@ namespace ClinicaVeterinaria.Repositories
             return 0;
         }
 
+        //médoto responsável pela inserção
         public Consulta Insert(Consulta entity)
         {
+            //verifica se o id do animal e do veterináro foram informados pois o 'required' não funciona qdo passa com valor = 0
             if (entity.animalId == 0)
                 throw new Exception("Id do animal não informado");
 
@@ -129,15 +133,17 @@ namespace ClinicaVeterinaria.Repositories
 
                     cmd.ExecuteNonQuery();
 
-                    entity.id = GetMaxId();
+                    entity.id = GetMaxId(); //pega o id do objeto inserido
                 }
             }
 
             return entity;
         }
 
+        //médoto responsável pela alteração
         public Consulta Update(int id, Consulta entity)
         {
+            //verifica se o id do animal e do veterináro foram informados pois o 'required' não funciona qdo passa com valor = 0
             if (entity.animalId == 0)
                 throw new Exception("Id do animal não informado");
 
@@ -178,6 +184,7 @@ namespace ClinicaVeterinaria.Repositories
             return entity;
         }
 
+        //médoto responsável pela exclusão
         public bool Delete(int id)
         {
             using (SqlConnection conn = Conexao.GetConection())

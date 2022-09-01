@@ -8,19 +8,19 @@ namespace ClinicaVeterinaria.Models
 {
     public class Consulta
     {
-        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]     //não mostra esse campo no json na inserção e alteração
         public int id { get; set; }
 
         [Required(ErrorMessage = "Animal não informado")]
         public int animalId {
-            get { return animal?.id ?? 0; }
-            
+            get { return animal?.id ?? 0; }     //se o objeto for nulo pega o valor default
+
             set
             {
                 AnimalRepository repo = new AnimalRepository();
 
                 if (value != 0)
-                    animal = repo.GetById(value);
+                    animal = repo.GetById(value);   //carrega os dados do objeto Animal
             }
         }
 
@@ -30,14 +30,14 @@ namespace ClinicaVeterinaria.Models
         [Required(ErrorMessage = "Veterinário não informado")]
         public int veterinarioId
         {
-            get { return veterinario?.id ?? 0; }
+            get { return veterinario?.id ?? 0; }        //se o objeto for nulo pega o valor default
 
             set
             {
                 VeterinarioRepository repo = new VeterinarioRepository();
 
                 if (value != 0)
-                    veterinario = repo.GetById(value);
+                    veterinario = repo.GetById(value);      //carrega os dados do objeto Veterinario
             }
         }
 

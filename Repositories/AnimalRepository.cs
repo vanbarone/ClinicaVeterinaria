@@ -9,6 +9,7 @@ namespace ClinicaVeterinaria.Repositories
 {
     public class AnimalRepository
     {
+        // Pega o objeto pelo id
         public Animal GetById(int id)
         {
             Animal entity = new Animal();
@@ -41,6 +42,7 @@ namespace ClinicaVeterinaria.Repositories
             return entity;
         }
 
+        //Lista todos os animais
         public List<Animal> GetAll()
         {
             List<Animal> lista = new List<Animal>();
@@ -74,6 +76,7 @@ namespace ClinicaVeterinaria.Repositories
             return lista;
         }
 
+        //Pega o maior id da tabela, uso isso pra saber o id do último objeto inserido
         public int GetMaxId()
         {
             using (SqlConnection conn = Conexao.GetConection())
@@ -97,13 +100,15 @@ namespace ClinicaVeterinaria.Repositories
             return 0;
         }
 
+        //médoto responsável pela inserção
         public Animal Insert(Animal entity)
         {
-            if (entity.clienteId == 0)
-                throw new Exception("Id do cliente não informado");
-
+            //verifica se o id do cliente e do tipo de animal foram informados pois o 'required' não funciona qdo passa com valor = 0
             if (entity.tipoAnimalId == 0)
                 throw new Exception("Id do tipo do animal não informado");
+
+            if (entity.clienteId == 0)
+                throw new Exception("Id do cliente não informado");
 
             using (SqlConnection conn = Conexao.GetConection())
             {
@@ -122,20 +127,22 @@ namespace ClinicaVeterinaria.Repositories
 
                     cmd.ExecuteNonQuery();
 
-                    entity.id = GetMaxId();
+                    entity.id = GetMaxId(); //pega o id do objeto inserido
                 }
             }
 
             return entity;
         }
 
+        //médoto responsável pela alteração
         public Animal Update(int id, Animal entity)
         {
-            if (entity.clienteId == 0)
-                throw new Exception("Id do cliente não informado");
-
+            //verifica se o id do cliente e do tipo de animal foram informados pois o 'required' não funciona qdo passa com valor = 0
             if (entity.tipoAnimalId == 0)
                 throw new Exception("Id do tipo do animal não informado");
+
+            if (entity.clienteId == 0)
+                throw new Exception("Id do cliente não informado");
 
             using (SqlConnection conn = Conexao.GetConection())
             {
@@ -167,6 +174,7 @@ namespace ClinicaVeterinaria.Repositories
             return entity;
         }
 
+        //médoto responsável pela exclusão
         public bool Delete(int id)
         {
             using (SqlConnection conn = Conexao.GetConection())
